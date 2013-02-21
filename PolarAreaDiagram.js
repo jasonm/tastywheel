@@ -202,6 +202,34 @@ var drawBars = function(val) {
     // .attr("fill", function(d, i) { return d3.scale.category20()(i); })
     .attr("d", bar)
     .style("opacity", 0.6);
+
+  handles = groups.selectAll(".series g.handle")
+    .data(pie)
+    .enter()
+    .append("g")
+    .attr("class", "attr");
+
+  handles.append("circle")
+    .data(pie)
+    .attr("fill", "#ddd")
+    .attr("stroke", "#666")
+    .attr("stroke-width", "3")
+    .attr("cx", function(d,i) {
+      var midAngle =
+        ((d.startAngle + d.endAngle) * 0.5)
+        -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
+
+      var handleRadius = radius(timeseries[val][0][i]);
+      return handleRadius * Math.cos(midAngle);
+    })
+    .attr("cy", function(d, i) {
+      var midAngle =
+        ((d.startAngle + d.endAngle) * 0.5)
+        -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
+      var handleRadius = radius(timeseries[val][0][i]);
+      return handleRadius * Math.sin(midAngle);
+    })
+    .attr("r", 10);
 }
 
 function redraw( val ) {        
