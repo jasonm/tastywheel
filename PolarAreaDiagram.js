@@ -1,5 +1,6 @@
-var timeseries, sdat, series, minVal = 0, maxVal = 6, radius, radiusLength;
-var w = 500, h = 500, axis = 6, time = 10, ruleColor = '#CCC';
+var timeseries, sdat, series, minVal = 2, maxVal = 6, radius, radiusLength;
+var w = 500, h = 500, axis = 10, time = 10, ruleColor = '#CCC';
+var innerRadiusIncrement = 10;
 var vizPadding = {
   top: 25,
   right: 25,
@@ -15,7 +16,7 @@ var loadViz = function(){
   setScales();
   drawBars(0);
   addLineAxes();
-  addCircleAxes();
+  // addCircleAxes();
 };
 
 var loadData = function(){
@@ -25,7 +26,7 @@ var loadData = function(){
 
   timeseries = [];
   sdat = [];
-  keys = ["x", "y", "z", "w", "u", "t"];
+  keys = ["x", "y", "z", "w", "u", "t", "a", "b"];
 
   for (j = 0; j < time; j++) {
     series = [[]];
@@ -128,12 +129,12 @@ addLineAxes = function () {
     .style("opacity", 0.75)
     .style("fill", "none");
 
-  lineAxes.append('svg:text')
-    .text(function(d,i){ return keys[i]; })
-    .attr("text-anchor", "middle")
-    //      .attr("transform", function (d, i) {
-    //          return (i / axis * 360) < 180 ? null : "rotate(90)";
-    //      });
+  // lineAxes.append('svg:text')
+  //   .text(function(d,i){ return keys[i]; })
+  //   .attr("text-anchor", "middle")
+  //        .attr("transform", function (d, i) {
+  //            return (i / axis * 360) < 180 ? null : "rotate(90)";
+  //        });
 };
 
 var draw = function (val) {
@@ -157,7 +158,7 @@ var draw = function (val) {
         .radius(function (d) { return 0; })
         .angle(function (d, i) { return (i / axis) * 2 * Math.PI; }))
     .style("stroke-width", 3)
-    .style("fill", "blue")
+    .style("fill", "red")
     .style("opacity", 0.4);
 
   lines.attr("d", d3.svg.area.radial()
@@ -182,8 +183,11 @@ var drawBars = function(val) {
 
   groups.exit().remove();
 
+  // var colors = ["red", "brown", "yellow", "green", "blue", "indigo", "violet", "black"];
+  var colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
+
   bar = d3.svg.arc()
-    .innerRadius( 0 )
+    .innerRadius( innerRadiusIncrement * w / 100.0 )
     .outerRadius( function(d,i) { return radius( timeseries[val][0][i] ); });
 
   arcs = groups.selectAll(".series g.arc")
@@ -192,10 +196,12 @@ var drawBars = function(val) {
     .append("g")
     .attr("class", "attr");
 
+
   arcs.append("path")
-    .attr("fill", "blue")
+    .attr("fill", function(d,i) { return colors[i % 8]; })
+    // .attr("fill", function(d, i) { return d3.scale.category20()(i); })
     .attr("d", bar)
-    .style("opacity", 0.4);
+    .style("opacity", 0.6);
 }
 
 function redraw( val ) {        
