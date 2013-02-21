@@ -196,10 +196,8 @@ var drawBars = function(val) {
     .append("g")
     .attr("class", "attr");
 
-
   arcs.append("path")
     .attr("fill", function(d,i) { return colors[i % 8]; })
-    // .attr("fill", function(d, i) { return d3.scale.category20()(i); })
     .attr("d", bar)
     .style("opacity", 0.6);
 
