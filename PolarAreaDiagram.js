@@ -10,6 +10,7 @@ var vizPadding = {
 var numticks = maxVal / 0.5;
 var viz, vizBody, maxs
 var keys = ["x", "y", "z", "w", "u", "t", "a", "b"];
+// var keys = ["x", "y"];
 var axis = keys.length;
 
 var loadViz = function(){
@@ -64,12 +65,11 @@ var buildBase = function(){
     .attr('id', 'body');
 };
 
+var centerXPos, centerYPos;
 setScales = function () {
   var heightCircleConstraint,
       widthCircleConstraint,
-      circleConstraint,
-      centerXPos,
-      centerYPos;
+      circleConstraint;
 
   //need a circle so find constraining dimension
   heightCircleConstraint = h - vizPadding.top - vizPadding.bottom;
@@ -174,6 +174,7 @@ var drawBars = function(val) {
   pie = d3.layout.pie().value(function(d) { return d; }).sort(null);
   d = [];
   for(i = 0; i<timeseries[val][0].length; i++) { d.push(1); }
+  // d = [1,2,3,5,8,11,19,30]; // different pie slice widths
 
   groups = vizBody.selectAll('.series')
     .data([d]);
@@ -192,15 +193,24 @@ var drawBars = function(val) {
     .outerRadius( function(d,i) { return radius( timeseries[val][0][i] ); });
 
   arcs = groups.selectAll(".series g.arc")
-    .data(pie)
+    .data(pie);
+
+  arc = arcs
     .enter()
     .append("g")
     .attr("class", "attr");
 
-  arcs.append("path")
+
+  arc.append("path")
     .attr("fill", function(d,i) { return colors[i % 8]; })
     .attr("d", bar)
     .style("opacity", 0.6);
+
+  arcs.exit().remove();
+
+  var width = 10;
+  var height = 10;
+  var handleRad = 10;
 
   handles = groups.selectAll(".series g.handle")
     .data(pie)
@@ -208,30 +218,71 @@ var drawBars = function(val) {
     .append("g")
     .attr("class", "attr");
 
+  var handleX = function(d, i) {
+    var midAngle =
+      ((d.startAngle + d.endAngle) * 0.5)
+      -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
+
+    var handleRadius = radius(timeseries[val][0][i]);
+    return handleRadius * Math.cos(midAngle);
+  };
+
+  var handleY = function(d, i) {
+    var midAngle =
+      ((d.startAngle + d.endAngle) * 0.5)
+      -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
+    var handleRadius = radius(timeseries[val][0][i]);
+    return handleRadius * Math.sin(midAngle);
+  };
+
+  var drag = d3.behavior.drag()
+    .origin(function(d, i) {
+      return {
+        x: handleX(d, i),
+        y: handleY(d, i)
+      };
+    })
+    .on("drag", function(d,i) {
+      var oldX = parseInt(d3.select(this).attr("cx"), 10);
+      var oldY = parseInt(d3.select(this).attr("cy"), 10);
+
+      var newX = oldX + d3.event.dx;
+      var newY = oldY + d3.event.dy;
+
+      d3.select(this).attr("cx", newX);
+      d3.select(this).attr("cy", newY);
+      d.x = newX;
+      d.y = newY;
+
+      var offsetX = centerXPos - newX;
+      var offsetY = centerYPos - newY;
+      var newMagnitude = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+      var newValue = radius.invert(newMagnitude);
+
+      var factor = newValue / timeseries[val][0][i];
+
+      if (newValue < minVal) { newValue = minVal; }
+      if (newValue > maxVal) { newValue = maxVal; }
+      timeseries[val][0][i] = newValue;
+
+      redraw(0);
+    });
+
   handles.append("circle")
+    .call(drag)
     .data(pie)
+    // .attr("transform", "translate(20,0)")
     .attr("fill", "#ddd")
     .attr("stroke", "#666")
     .attr("stroke-width", "3")
-    .attr("cx", function(d,i) {
-      var midAngle =
-        ((d.startAngle + d.endAngle) * 0.5)
-        -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
+    .attr("cx", handleX)
+    .attr("cy", handleY)
+    .attr("r", handleRad);
 
-      var handleRadius = radius(timeseries[val][0][i]);
-      return handleRadius * Math.cos(midAngle);
-    })
-    .attr("cy", function(d, i) {
-      var midAngle =
-        ((d.startAngle + d.endAngle) * 0.5)
-        -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
-      var handleRadius = radius(timeseries[val][0][i]);
-      return handleRadius * Math.sin(midAngle);
-    })
-    .attr("r", 10);
 }
 
 function redraw( val ) {        
-  vizBody.selectAll('#userdata').remove();
-  drawBar( val );
+  // vizBody.selectAll('#userdata').remove();
+  vizBody.selectAll('.series').remove();
+  drawBars( val );
 }
