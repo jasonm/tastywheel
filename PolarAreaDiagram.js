@@ -1,5 +1,5 @@
 var timeseries, sdat, series, minVal = 2, maxVal = 6, radius, radiusLength;
-var w = 500, h = 500, axis = 8, time = 10, ruleColor = '#CCC';
+var w = 500, h = 500, time = 10, ruleColor = '#CCC';
 var innerRadiusIncrement = 10;
 var vizPadding = {
   top: 25,
@@ -8,7 +8,9 @@ var vizPadding = {
   left: 25
 };
 var numticks = maxVal / 0.5;
-var viz, vizBody, maxs, keys;
+var viz, vizBody, maxs
+var keys = ["x", "y", "z", "w", "u", "t", "a", "b"];
+var axis = keys.length;
 
 var loadViz = function(){
   loadData();
@@ -26,7 +28,6 @@ var loadData = function(){
 
   timeseries = [];
   sdat = [];
-  keys = ["x", "y", "z", "w", "u", "t", "a", "b"];
 
   for (j = 0; j < time; j++) {
     series = [[]];
