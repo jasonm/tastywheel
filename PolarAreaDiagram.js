@@ -271,7 +271,6 @@ var drawBars = function(val) {
   handles.append("circle")
     .call(drag)
     .data(pie)
-    // .attr("transform", "translate(20,0)")
     .attr("fill", "#ddd")
     .attr("stroke", "#666")
     .attr("stroke-width", "3")
@@ -282,7 +281,6 @@ var drawBars = function(val) {
 }
 
 function redraw( val ) {        
-  // vizBody.selectAll('#userdata').remove();
   vizBody.selectAll('.series').remove();
   drawBars( val );
 }
