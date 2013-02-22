@@ -12,6 +12,8 @@ ol.carousel-indicators {
 
 ol.carousel-indicators > li {
   background-color: #ccc;
+  cursor: hand;
+  cursor: pointer;
 }
 
 ol.carousel-indicators > li.active {
@@ -19,7 +21,7 @@ ol.carousel-indicators > li.active {
 }
 
 #radial {
-  width: 800px;
-  height: 800px;
+  width: 600px;
+  height: 600px;
   margin: 0 auto;
 }

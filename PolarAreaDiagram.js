@@ -1,5 +1,5 @@
-var timeseries, sdat, series, minVal = 2, maxVal = 6, radius, radiusLength;
-var w = 800, h = 800, time = 10, ruleColor = '#CCC';
+var timeseries, sdat, series, minVal = 1.4, maxVal = 6, radius, radiusLength;
+var w = 600, h = 600, time = 10, ruleColor = '#CCC';
 var innerRadiusIncrement = 10;
 var vizPadding = {
   top: 25,
