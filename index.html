@@ -2,11 +2,52 @@
 <html>
 <head>
   <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
   <link href="jquery-ui-1.10.1.custom/css/ui-lightness/jquery-ui-1.10.1.custom.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Polar Area Diagram</title>
 </head>
 <body>
-  <div id="radial"></div>
+
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+
+        <div id="flavors-carousel" class="carousel slide">
+          <!-- Carousel items -->
+          <div class="carousel-inner">
+            <!-- <div class="active item"> -->
+            <!--   <h1>Slider 1</h1> -->
+            <!-- </div> -->
+            <!-- <div class="item"> -->
+            <!--   <h1>Slider 2</h1> -->
+            <!-- </div> -->
+            <!-- <div class="item"> -->
+            <!--   <h1>Slider 3</h1> -->
+            <!-- </div> -->
+          </div>
+          <!-- Carousel nav -->
+          <a class="carousel-control left" href="#flavors-carousel" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#flavors-carousel" data-slide="next">&rsaquo;</a>
+          <ol class="carousel-indicators">
+            <!-- <li data-target="#flavors-carousel" data-slide-to="0" class="active"></li> -->
+            <!-- <li data-target="#flavors-carousel" data-slide-to="1"></li> -->
+            <!-- <li data-target="#flavors-carousel" data-slide-to="2"></li> -->
+          </ol>
+        </div>
+
+        <div id="slider"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="span12">
+        <div id="radial"></div>
+      </div>
+    </div>
+
+  </div>
+
   <script src="jquery-ui-1.10.1.custom/js/jquery-1.9.1.js"></script>
   <script src="jquery-ui-1.10.1.custom/js/jquery-ui-1.10.1.custom.js"></script>
   <script src="js/jquery.ui.touch-punch.js"></script>
@@ -14,7 +55,35 @@
   <script type="text/javascript" charset="UTF-8" src="js/d3.v3.js"></script>
   <script type="text/javascript" src="PolarAreaDiagram.js"></script>
   <script type="text/javascript">
-    loadViz();
+    $(function() {
+      var flavors = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
+
+      (function() {
+        var inner = $('div#flavors-carousel div.carousel-inner');
+        var indicators = $('div#flavors-carousel ol.carousel-indicators');
+
+        $.each(flavors, function(index, flavor) {
+          inner.append('<div class="item"><h1>' + flavor + '</h1></div>');
+          indicators.append('<li data-target="#flavors-carousel" data-slide-to="' + index + '"></li>');
+        });
+
+        inner.find('> div').first().addClass('active');
+        indicators.find('> li').first().addClass('active');
+      })();
+
+      loadViz();
+
+      $( "#slider" ).slider({
+      });
+
+        // min: 1,
+        // max: 1000,
+        // // range: "min",
+        // value: 1,
+        // slide: function( event, ui ) {
+        //   // select[ 0 ].selectedIndex = ui.value - 1;
+        // }
+    });
   </script>
 </body> 
 </html>
