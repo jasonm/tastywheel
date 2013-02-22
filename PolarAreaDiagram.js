@@ -81,8 +81,8 @@ setScales = function () {
   radiusLength = radius(maxVal);
 
   //attach everything to the group that is centered around middle
-  centerXPos = widthCircleConstraint / 2 + vizPadding.left;
-  centerYPos = heightCircleConstraint / 2 + vizPadding.top;
+  centerXPos = (widthCircleConstraint / 2) + vizPadding.left;
+  centerYPos = (heightCircleConstraint / 2) + vizPadding.top;
 
   vizBody.attr("transform", "translate(" + centerXPos + ", " + centerYPos + ")");
 };
@@ -235,6 +235,9 @@ var drawBars = function(val) {
     return handleRadius * Math.sin(midAngle);
   };
 
+  var svgLeft = $('svg').position().left;
+  var svgTop = $('svg').position().top;
+
   var drag = d3.behavior.drag()
     .origin(function(d, i) {
       return {
@@ -246,6 +249,9 @@ var drawBars = function(val) {
       var oldX = parseInt(d3.select(this).attr("cx"), 10);
       var oldY = parseInt(d3.select(this).attr("cy"), 10);
 
+      console.log(d3.select(this).attr("cx"),
+                  d3.select(this).attr("cx"));
+
       var newX = oldX + d3.event.dx;
       var newY = oldY + d3.event.dy;
 
@@ -254,8 +260,9 @@ var drawBars = function(val) {
       d.x = newX;
       d.y = newY;
 
-      var offsetX = centerXPos - newX;
-      var offsetY = centerYPos - newY;
+      var offsetX = (centerXPos + svgLeft) - newX;
+      var offsetY = (centerYPos  + svgTop) - newY;
+
       var newMagnitude = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
       var newValue = radius.invert(newMagnitude);
 
@@ -264,6 +271,8 @@ var drawBars = function(val) {
       if (newValue < minVal) { newValue = minVal; }
       if (newValue > maxVal) { newValue = maxVal; }
       timeseries[val][0][i] = newValue;
+
+      console.log(timeseries[val][0]);
 
       redraw(0);
     });
