@@ -235,8 +235,6 @@ var drawBars = function(val) {
     return handleRadius * Math.sin(midAngle);
   };
 
-  var svgLeft = $('svg').position().left;
-  var svgTop = $('svg').position().top;
 
   var drag = d3.behavior.drag()
     .origin(function(d, i) {
@@ -260,10 +258,12 @@ var drawBars = function(val) {
       d.x = newX;
       d.y = newY;
 
-      var offsetX = (centerXPos + svgLeft) - newX;
-      var offsetY = (centerYPos  + svgTop) - newY;
+      var svgLeft = $('svg').position().left - $(document).scrollLeft();
+      var svgTop = $('svg').position().top - $(document).scrollTop();
+      var distanceFromCenterX = (centerXPos + svgLeft) - newX;
+      var distanceFromCenterY = (centerYPos  + svgTop) - newY;
 
-      var newMagnitude = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+      var newMagnitude = Math.sqrt(distanceFromCenterX * distanceFromCenterX + distanceFromCenterY * distanceFromCenterY);
       var newValue = radius.invert(newMagnitude);
 
       var factor = newValue / timeseries[val][0][i];
