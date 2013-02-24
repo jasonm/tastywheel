@@ -3,7 +3,7 @@ function Wheel(options) {
 
   var keys = options.keys;
   var data = options.values;
-  var onDataChange = options.onDataChange;
+  var onDataChange = options.onDataChange || function(){};
 
   var radius, radiusLength;
   var w = 600, h = 600, ruleColor = '#CCC';
@@ -149,12 +149,14 @@ function Wheel(options) {
       var handle = d3.select(this);
       slice.attr("fill-opacity", 0.5);
       handle.style("fill", "#fff");
+      onDataChange(data, i);
     })
     .on("dragend", function(d, i) {
       var slice = d3.select(vizBody.selectAll(".series g.slice path")[0][i]);
       var handle = d3.select(this);
       slice.attr("fill-opacity", 0.6);
       handle.style("fill", "#ddd");
+      onDataChange(data, i);
     })
     .on("drag", function(d,i) {
       var newRadius = Math.sqrt(d3.event.x * d3.event.x +
@@ -166,6 +168,7 @@ function Wheel(options) {
       if (newValue > maxVal) { newValue = maxVal; }
 
       updateData(i, newValue);
+      onDataChange(data, i);
     });
 
   var drawBars = function() {
@@ -224,10 +227,6 @@ function Wheel(options) {
     vizBody.selectAll(".series g.slice path")
       .data(pie(data))
       .attr("d", bar);
-
-    if (onDataChange) {
-      onDataChange(data, i);
-    }
   }
 
   buildBase();
@@ -239,6 +238,8 @@ function Wheel(options) {
     addCircleAxes();
   }
   drawBars();
+
+  this.updateData = updateData;
 
   return this;
 }
