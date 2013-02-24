@@ -43,18 +43,16 @@
     $(function() {
       var flavors = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
 
-      (function() {
-        var inner = $('div#flavors-carousel div.carousel-inner');
-        var indicators = $('div#flavors-carousel ol.carousel-indicators');
+      var inner = $('div#flavors-carousel div.carousel-inner');
+      var indicators = $('div#flavors-carousel ol.carousel-indicators');
 
-        $.each(flavors, function(index, flavor) {
-          inner.append('<div class="item"><h1>' + flavor + '</h1></div>');
-          indicators.append('<li data-target="#flavors-carousel" data-slide-to="' + index + '"></li>');
-        });
+      $.each(flavors, function(index, flavor) {
+        inner.append('<div class="item"><h1>' + flavor + '</h1></div>');
+        indicators.append('<li data-target="#flavors-carousel" data-slide-to="' + index + '"></li>');
+      });
 
-        inner.find('> div').first().addClass('active');
-        indicators.find('> li').first().addClass('active');
-      })();
+      inner.find('> div').first().addClass('active');
+      indicators.find('> li').first().addClass('active');
 
       var values = [3, 3.5, 3, 3.5, 4, 4.5, 5, 6];
 
