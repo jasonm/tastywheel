@@ -4,8 +4,8 @@
   <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
   <link href="jquery-ui-1.10.1.custom/css/ui-lightness/jquery-ui-1.10.1.custom.css" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Polar Area Diagram</title>
+  <meta name="viewport" content="user-scalable=no">
 </head>
 <body>
 
@@ -92,6 +92,7 @@
         }
       });
 
+      $('body').on('touchmove', function(e) { e.preventDefault(); });
     });
   </script>
 </body> 
