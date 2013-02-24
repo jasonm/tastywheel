@@ -54,17 +54,20 @@
       inner.find('> div').first().addClass('active');
       indicators.find('> li').first().addClass('active');
 
+      var minVal = 3;
+      var maxVal = 10;
       var values = [3, 3.5, 3, 3.5, 4, 4.5, 5, 6];
 
       var dataChange = function(data, i) {
-        console.log(data);
+        $('div#flavors-carousel').carousel(i);
+        $( "#slider" ).slider({ value: data[i] });
       };
 
       window.wheel = new Wheel({
         keys: flavors,
         values: values,
-        minVal: 3.0,
-        maxVal: 10.0,
+        minVal: minVal,
+        maxVal: maxVal,
         numticks: 5,
         lineAxes: true,
         circleAxes: false,
@@ -73,6 +76,9 @@
       });
 
       $( "#slider" ).slider({
+        min: minVal,
+        max: maxVal,
+        step: 0.1
       });
     });
   </script>
