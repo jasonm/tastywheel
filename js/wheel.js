@@ -116,7 +116,13 @@ function Wheel(options) {
            });
   };
 
-  var pie = d3.layout.pie().value(function(d) { return 1; }).sort(null);
+  var angleOffset = -Math.PI / keys.length;
+
+  var pie = d3.layout.pie()
+    .value(function(d) { return 1; })
+    .sort(null)
+    .startAngle(angleOffset)
+    .endAngle(angleOffset + 2 * Math.PI);
 
   var bar = d3.svg.arc()
     .innerRadius( function() {
