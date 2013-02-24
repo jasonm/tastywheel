@@ -31,6 +31,9 @@
       </div>
     </div>
 
+    <div class="row">
+      <a id="start-attracting" class="span2 offset5 btn">Toggle Attract</a>
+    </div>
   </div>
 
   <script src="jquery-ui-1.10.1.custom/js/jquery-1.9.1.js"></script>
@@ -41,11 +44,67 @@
   <script type="text/javascript" src="js/wheel.js"></script>
   <script type="text/javascript">
     $(function() {
-      var flavors = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
-      var values = [3, 3.5, 3, 3.5, 4, 4.5, 5, 6];
-
       var minVal = 3;
       var maxVal = 10;
+
+      var flavors = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
+      var values = [];
+
+      var randomValue = function() {
+        var valueScale = d3.scale.linear()
+          .domain([0, 1])
+          .range([minVal + 1.0, maxVal - 1.0]);
+        return valueScale(Math.random());
+      };
+
+      for (var i = 0; i < flavors.length; i++) {
+        values.push(randomValue());
+      }
+
+      var AttractBehavior = function() {
+        var self = this;
+        var delta = 0.125;
+        var speed = 20;
+        var interval;
+        var sinScale = d3.scale.linear()
+          .domain([-1, 1])
+          .range([-delta, delta]);
+
+        this.start = function() {
+          var originalValues = values.slice(0);
+
+          interval = setInterval(function() {
+            var time = new Date() / 1000;
+            for (var i = 0; i < values.length; i++) {
+              var offset = sinScale(Math.sin(time * speed + i));
+              var newValue = originalValues[i] + offset;
+              wheel.updateData(i, newValue);
+            }
+          }, 1000 / 60.0);
+        };
+
+        this.stop = function() {
+          clearInterval(interval);
+          interval = undefined;
+        };
+
+
+        this.toggle = function() {
+          if (interval) {
+            self.stop();
+          } else {
+            self.start();
+          }
+        };
+
+        return this;
+      }
+
+      var attracter = new AttractBehavior();
+      $('#start-attracting').click(function(e) {
+        e.preventDefault();
+        attracter.toggle();
+      });
 
       var sliderEl = $( "#slider" );
       sliderEl.slider({
@@ -54,6 +113,7 @@
         max: maxVal,
         step: 0.1,
         slide: function(event, ui) {
+          attracter.stop();
           wheel.updateData(carouselIndex, ui.value);
         }
       });
@@ -87,6 +147,7 @@
         circleAxes: false,
         innerRadiusIncrement: 9.2, /* why? */
         onDataChange: function(data, i) {
+          attracter.stop();
           carouselEl.carousel(i).carousel('pause');
           sliderEl.slider({ value: data[i] });
         }
