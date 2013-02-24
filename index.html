@@ -38,7 +38,7 @@
   <script src="js/jquery.ui.touch-punch.js"></script>
   <script type="text/javascript" src="bootstrap/js/bootstrap.js" src="d3.v3.js"></script>
   <script type="text/javascript" charset="UTF-8" src="js/d3.v3.js"></script>
-  <script type="text/javascript" src="PolarAreaDiagram.js"></script>
+  <script type="text/javascript" src="js/wheel.js"></script>
   <script type="text/javascript">
     $(function() {
       var flavors = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
@@ -56,18 +56,22 @@
         indicators.find('> li').first().addClass('active');
       })();
 
-      loadViz();
+      var values = [2, 2.5, 3, 3.5, 4, 4.5, 5, 6];
+
+      var dataChange = function(data, i) {
+        console.log(data);
+      };
+
+      window.wheel = new Wheel({
+        keys: flavors,
+        values: values,
+        minVal: 1.5,
+        maxVal: 6.0,
+        onDataChange: dataChange
+      });
 
       $( "#slider" ).slider({
       });
-
-        // min: 1,
-        // max: 1000,
-        // // range: "min",
-        // value: 1,
-        // slide: function( event, ui ) {
-        //   // select[ 0 ].selectedIndex = ui.value - 1;
-        // }
     });
   </script>
 </body> 
