@@ -7,23 +7,18 @@ function Wheel(options) {
 
   var radius, radiusLength;
   var w = 600, h = 600, ruleColor = '#CCC';
-  var innerRadiusIncrement = 10;
+  var innerRadiusIncrement = options.innerRadiusIncrement;
   var vizPadding = {
     top: 25,
     right: 25,
     bottom: 25,
     left: 25
   };
-  var minVal = options.minVal;
-  var maxVal = options.maxVal;
-  var numticks = maxVal / 0.5;
+  var minVal = options.minVal || Math.min.apply(null, data);
+  var maxVal = options.maxVal || Math.max.apply(null, data);
+  var numticks = options.numticks || (maxVal - minVal + 1);
   var viz, vizBody, maxs
-  var sdat = [];
   var color = d3.scale.category10();
-
-  for (i=0; i<=numticks; i++) {
-    sdat[i] = (maxVal/numticks) * i;
-  }
 
   var buildBase = function(){
     viz = d3.select("#radial")
@@ -42,9 +37,10 @@ function Wheel(options) {
       .attr('id', 'body');
   };
 
-  var centerXPos, centerYPos;
   var setScales = function () {
-    var heightCircleConstraint,
+    var centerXPos,
+        centerYPos,
+        heightCircleConstraint,
         widthCircleConstraint,
         circleConstraint;
 
@@ -65,7 +61,10 @@ function Wheel(options) {
   };
 
   var addCircleAxes = function() {
-    var radialTicks = radius.ticks(numticks), circleAxes, i;
+    var radialTicks = radius.ticks(numticks), circleAxes, i, sdat = [];
+    for (i=0; i<=numticks; i++) {
+      sdat[i] = (maxVal/numticks) * i;
+    }
 
     vizBody.selectAll('.circle-ticks').remove();
 
@@ -117,63 +116,63 @@ function Wheel(options) {
            });
   };
 
-  var handleX, handleY, pie, groups, bar, arcs;
-  var drawBars = function(val) {
-    handleX = function(d, i) {
-      var midAngle =
-        ((d.startAngle + d.endAngle) * 0.5)
-        -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
+  var pie = d3.layout.pie().value(function(d) { return 1; }).sort(null);
 
-      var handleRadius = radius(d.data);
-      return handleRadius * Math.cos(midAngle);
-    };
+  var bar = d3.svg.arc()
+    .innerRadius( function() {
+      return innerRadiusIncrement * w / 100.0;
+    })
+    .outerRadius( function(d,i) { 
+      return radius( d.data );
+    });
 
-    handleY = function(d, i) {
-      var midAngle =
-        ((d.startAngle + d.endAngle) * 0.5)
-        -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
-      var handleRadius = radius(d.data);
-      return handleRadius * Math.sin(midAngle);
-    };
+  var handleX = function(d, i) {
+    var midAngle =
+      ((d.startAngle + d.endAngle) * 0.5)
+      -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
 
-    var drag = d3.behavior.drag()
-      .on("dragstart", function(d, i) {
-        var slice = d3.select(vizBody.selectAll(".series g.slice path")[0][i]);
-        var handle = d3.select(this);
+    var handleRadius = radius(d.data);
+    return handleRadius * Math.cos(midAngle);
+  };
 
-        slice.attr("fill-opacity", 0.5);
-        handle.style("fill", "#fff");
-      })
-      .on("dragend", function(d, i) {
-        var slice = d3.select(vizBody.selectAll(".series g.slice path")[0][i]);
-        var handle = d3.select(this);
+  var handleY = function(d, i) {
+    var midAngle =
+      ((d.startAngle + d.endAngle) * 0.5)
+      -  (Math.PI / 2.0); // D3 seems to operate on a different quadrant basis?
+    var handleRadius = radius(d.data);
+    return handleRadius * Math.sin(midAngle);
+  };
 
-        slice.attr("fill-opacity", 0.6);
-        handle.style("fill-opacity", 1.0);
-        handle.style("fill", "#ddd");
+  var dragHandle = d3.behavior.drag()
+    .on("dragstart", function(d, i) {
+      var slice = d3.select(vizBody.selectAll(".series g.slice path")[0][i]);
+      var handle = d3.select(this);
+      slice.attr("fill-opacity", 0.5);
+      handle.style("fill", "#fff");
+    })
+    .on("dragend", function(d, i) {
+      var slice = d3.select(vizBody.selectAll(".series g.slice path")[0][i]);
+      var handle = d3.select(this);
+      slice.attr("fill-opacity", 0.6);
+      handle.style("fill", "#ddd");
+    })
+    .on("drag", function(d,i) {
+      var newRadius = Math.sqrt(d3.event.x * d3.event.x +
+                                d3.event.y * d3.event.y);
 
-      })
-      .on("drag", function(d,i) {
+      var newValue = radius.invert(newRadius);
 
-        var x = d3.event.x;
-        var y = d3.event.y;
+      if (newValue < minVal) { newValue = minVal; }
+      if (newValue > maxVal) { newValue = maxVal; }
 
-        var newMagnitude = Math.sqrt(x * x + y * y);
-        var newValue = radius.invert(newMagnitude);
+      updateData(i, newValue);
+    });
 
-        if (newValue < minVal) { newValue = minVal; }
-        if (newValue > maxVal) { newValue = maxVal; }
+  var drawBars = function() {
+    var ones = [];
+    for(i = 0; i<data.length; i++) { ones.push(i); }
 
-        updateData(val, i, newValue);
-      });
-
-    pie = d3.layout.pie().value(function(d) { return 1; }).sort(null);
-
-    ones = [];
-    for(i = 0; i<data.length; i++) { ones.push(1); }
-    // d = [1,2,3,5,8,11,19,30]; // different pie slice widths
-
-    groups = vizBody.selectAll('.series')
+    var groups = vizBody.selectAll('.series')
       .data([ones]);
     groups.enter().append("svg:g")
       .attr('class', 'series')
@@ -182,13 +181,7 @@ function Wheel(options) {
 
     groups.exit().remove();
 
-    bar = d3.svg.arc()
-      .innerRadius( innerRadiusIncrement * w / 100.0 )
-      .outerRadius( function(d,i) { 
-        return radius( d.data );
-      });
-
-    arcs = groups.selectAll(".series g.arc")
+    var arcs = groups.selectAll(".series g.arc")
       .data(pie(data));
 
     arc = arcs
@@ -211,7 +204,7 @@ function Wheel(options) {
       .attr("class", "handle");
 
     handles.append("circle")
-      .call(drag)
+      .call(dragHandle)
       .attr("fill", "#ddd")
       .attr("stroke", "#666")
       .attr("stroke-width", "3")
@@ -220,7 +213,7 @@ function Wheel(options) {
       .attr("r", handleRad);
   }
 
-  var updateData = function(val, i, newValue) {
+  var updateData = function(i, newValue) {
     data[i] = newValue;
 
     vizBody.selectAll('.series g.handle circle')
@@ -239,9 +232,13 @@ function Wheel(options) {
 
   buildBase();
   setScales();
-  drawBars(0);
-  addLineAxes();
-  addCircleAxes();
+  if (options.lineAxes) {
+    addLineAxes();
+  }
+  if (options.circleAxes) {
+    addCircleAxes();
+  }
+  drawBars();
 
   return this;
 }

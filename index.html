@@ -56,7 +56,7 @@
         indicators.find('> li').first().addClass('active');
       })();
 
-      var values = [2, 2.5, 3, 3.5, 4, 4.5, 5, 6];
+      var values = [3, 3.5, 3, 3.5, 4, 4.5, 5, 6];
 
       var dataChange = function(data, i) {
         console.log(data);
@@ -65,8 +65,12 @@
       window.wheel = new Wheel({
         keys: flavors,
         values: values,
-        minVal: 1.5,
-        maxVal: 6.0,
+        minVal: 3.0,
+        maxVal: 10.0,
+        numticks: 5,
+        lineAxes: true,
+        circleAxes: false,
+        innerRadiusIncrement: 9.2, /* why? */
         onDataChange: dataChange
       });
 
