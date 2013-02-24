@@ -6,7 +6,7 @@ function Wheel(options) {
   var onDataChange = options.onDataChange || function(){};
 
   var radius, radiusLength;
-  var w = 600, h = 600, ruleColor = '#CCC';
+  var w = 800, h = 800, ruleColor = '#CCC';
   var innerRadiusIncrement = options.innerRadiusIncrement;
   var vizPadding = {
     top: 25,
