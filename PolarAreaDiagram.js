@@ -1,5 +1,5 @@
-var timeseries, sdat, series, minVal = 1.4, maxVal = 6, radius, radiusLength;
-var w = 600, h = 600, time = 10, ruleColor = '#CCC';
+var values, sdat, series, minVal = 1.4, maxVal = 6, radius, radiusLength;
+var w = 600, h = 600, ruleColor = '#CCC';
 var innerRadiusIncrement = 10;
 var vizPadding = {
   top: 25,
@@ -10,7 +10,8 @@ var vizPadding = {
 var numticks = maxVal / 0.5;
 var viz, vizBody, maxs
 var keys = ["x", "y", "z", "w", "u", "t", "a", "b"];
-// var keys = ["x", "y"];
+var keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B"];
+var keys = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
 var axis = keys.length;
 
 var loadViz = function(){
@@ -18,7 +19,7 @@ var loadViz = function(){
   buildBase();
   setScales();
   drawBars(0);
-  addLineAxes();
+  // addLineAxes();
   // addCircleAxes();
 };
 
@@ -27,25 +28,16 @@ var loadData = function(){
     return Math.random() * (to - from) + from;
   };
 
-  timeseries = [];
+  data = [];
   sdat = [];
 
-  for (j = 0; j < time; j++) {
-    series = [[]];
-    for (i = 0; i < axis; i++) {
-      series[0][i] = randomFromTo(minVal,maxVal);
-    }
-    // This fills in the line 
-    /*        for (i = 0; i < series.length; i += 1) {
-              series[i].push(series[i][0]);
-              }
-              */        
-    for (i=0; i<=numticks; i++) {
-      sdat[i] = (maxVal/numticks) * i;
-    }
-
-    timeseries[j] = series;
+  for (i = 0; i < axis; i++) {
+    data[i] = randomFromTo(minVal,maxVal);
   }
+  for (i=0; i<=numticks; i++) {
+    sdat[i] = (maxVal/numticks) * i;
+  }
+
 };
 
 var buildBase = function(){
@@ -130,12 +122,15 @@ addLineAxes = function () {
     .style("opacity", 0.75)
     .style("fill", "none");
 
-  // lineAxes.append('svg:text')
-  //   .text(function(d,i){ return keys[i]; })
-  //   .attr("text-anchor", "middle")
-  //        .attr("transform", function (d, i) {
-  //            return (i / axis * 360) < 180 ? null : "rotate(90)";
-  //        });
+  lineAxes.append('svg:text')
+    .text(function(d,i){ return keys[i]; })
+    .attr("text-anchor", "middle")
+         .attr("transform", function (d, i) {
+           var increment = 360.0 / axis;
+           console.log(increment);
+           var angle = 90 - (increment * i);
+           return "rotate(" + angle + ")";
+         });
 };
 
 // var draw = function (val) {
@@ -144,7 +139,7 @@ addLineAxes = function () {
 //       linesToUpdate;
 // 
 //   groups = vizBody.selectAll('.series')
-//     .data(timeseries[val]);
+//     .data(data);
 //   groups.enter().append("svg:g")
 //     .attr('class', 'series')
 //     .style('fill', "blue")
@@ -220,10 +215,8 @@ var drawBars = function(val) {
   pie = d3.layout.pie().value(function(d) { return 1; }).sort(null);
 
   ones = [];
-  for(i = 0; i<timeseries[val][0].length; i++) { ones.push(1); }
+  for(i = 0; i<data.length; i++) { ones.push(1); }
   // d = [1,2,3,5,8,11,19,30]; // different pie slice widths
-
-  var data = timeseries[val][0];
 
   window.groups = vizBody.selectAll('.series')
     .data([ones]);
@@ -275,7 +268,6 @@ var drawBars = function(val) {
 }
 
 function updateData(val, i, newValue) {
-  var data = timeseries[val][0];
   data[i] = newValue;
 
   vizBody.selectAll('.series g.handle circle')
