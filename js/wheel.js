@@ -18,7 +18,10 @@ function Wheel(options) {
   var maxVal = options.maxVal || Math.max.apply(null, data);
   var numticks = options.numticks || (maxVal - minVal + 1);
   var viz, vizBody, maxs
-  var color = d3.scale.category10();
+  var color = function(i) {
+    var colors =  ['#8D5103', '#F0A800', '#FFD600', '#F76F05','#590808', '#3D0C0A', '#520707',  '#680808'];
+    return colors[i % colors.length];
+  }
 
   var buildBase = function(){
     viz = d3.select("#radial")
