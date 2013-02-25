@@ -154,16 +154,15 @@ function Wheel(options) {
 
   var dragHandle = d3.behavior.drag()
     .on("dragstart", function(d, i) {
-      var slice = d3.select(vizBody.selectAll(".series g.slice path")[0][i]);
       var handle = d3.select(this);
-      slice.attr("fill-opacity", 0.5);
+      self.setFocus(i);
       handle.style("fill", "#fff");
       onDataChange(data, i);
     })
     .on("dragend", function(d, i) {
       var slice = d3.select(vizBody.selectAll(".series g.slice path")[0][i]);
       var handle = d3.select(this);
-      slice.attr("fill-opacity", 0.6);
+      self.setFocus(null);
       handle.style("fill", "#ddd");
       onDataChange(data, i);
     })
@@ -180,6 +179,18 @@ function Wheel(options) {
       onDataChange(data, i);
     });
 
+  var focus = 0;
+  this.setFocus = function(newFocus) {
+    console.log("new focus: " + newFocus);
+    focus = newFocus;
+
+    vizBody.selectAll(".series g.slice path")
+      .data(pie(data))
+      .attr("d", bar)
+      .style("fill-opacity", function(d, i) {
+        return (focus == null || focus == i) ? 0.8 : 0.6
+      });
+  }
   var drawBars = function() {
 
     var groups = vizBody.selectAll('.series')
@@ -191,6 +202,7 @@ function Wheel(options) {
 
     groups.exit().remove();
 
+
     var arcs = groups.selectAll(".series g.arc")
       .data(pie(data));
 
@@ -201,7 +213,7 @@ function Wheel(options) {
       .append("path")
         .attr("fill", function(d,i) { return color(i); })
         .attr("d", bar)
-        .style("opacity", 0.6);
+        .style("fill-opacity", 0.8);
 
     var width = 10;
     var height = 10;

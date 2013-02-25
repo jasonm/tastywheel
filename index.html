@@ -135,6 +135,7 @@
       carouselEl.on('slid', function(e) {
         carouselIndex = $('#flavors-carousel .active').index('#flavors-carousel .item')
         sliderEl.slider({ value: values[carouselIndex] });
+        wheel.setFocus(carouselIndex);
       });
 
       window.wheel = new Wheel({
