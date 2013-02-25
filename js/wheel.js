@@ -181,11 +181,9 @@ function Wheel(options) {
     });
 
   var drawBars = function() {
-    var ones = [];
-    for(i = 0; i<data.length; i++) { ones.push(i); }
 
     var groups = vizBody.selectAll('.series')
-      .data([ones]);
+      .data(["only one series"]);
     groups.enter().append("svg:g")
       .attr('class', 'series')
       .style('fill', "blue")
