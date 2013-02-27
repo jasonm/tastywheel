@@ -80,7 +80,7 @@
       carouselEl.carousel({ interval: 4000 });
 
       carouselEl.on('slide', function(e) {
-        var index = $('#attract-carousel .active').index('#attract-carousel .item')
+        var index = $(e.relatedTarget).index('#attract-carousel .item')
         wheel.transitionData(beers[index].ratings);
       });
 
