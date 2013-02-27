@@ -21,7 +21,6 @@
           <ol class="carousel-indicators"></ol>
         </div>
 
-        <div id="slider"></div>
       </div>
     </div>
 
@@ -107,18 +106,6 @@
         attracter.toggle();
       });
 
-      var sliderEl = $( "#slider" );
-      sliderEl.slider({
-        value: values[0],
-        min: minVal,
-        max: maxVal,
-        step: 0.1,
-        slide: function(event, ui) {
-          attracter.stop();
-          wheel.updateData(carouselIndex, ui.value);
-        }
-      });
-
       var carouselIndex = 0;
       var carouselEl = $('div#flavors-carousel');
 
@@ -135,7 +122,6 @@
 
       carouselEl.on('slid', function(e) {
         carouselIndex = $('#flavors-carousel .active').index('#flavors-carousel .item')
-        sliderEl.slider({ value: values[carouselIndex] });
         wheel.setFocus(carouselIndex);
       });
 
@@ -151,7 +137,6 @@
         onDataChange: function(data, i) {
           attracter.stop();
           carouselEl.carousel(i).carousel('pause');
-          sliderEl.slider({ value: data[i] });
         }
       });
 
