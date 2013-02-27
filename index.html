@@ -14,10 +14,10 @@
     <div class="row">
       <div class="span12">
 
-        <div id="flavors-carousel" class="carousel slide">
+        <div id="attract-carousel" class="carousel slide">
           <div class="carousel-inner"></div>
-          <a class="carousel-control left" href="#flavors-carousel" data-slide="prev">&lsaquo;</a>
-          <a class="carousel-control right" href="#flavors-carousel" data-slide="next">&rsaquo;</a>
+          <a class="carousel-control left" href="#attract-carousel" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#attract-carousel" data-slide="next">&rsaquo;</a>
           <ol class="carousel-indicators"></ol>
         </div>
 
@@ -60,22 +60,28 @@
         values.push(randomValue());
       }
 
-      var carouselIndex = 0;
-      var carouselEl = $('div#flavors-carousel');
+      var beers = [
+        { name: 'Pliny the Elder',               ratings: [9.0, 5.0, 3.0, 7.0, 3.0, 9.0, 9.0, 8.5] },
+        { name: 'Founders Breakfast Stout',      ratings: [4.0, 6.0, 8.0, 4.0, 9.0, 4.0, 3.0, 4.0] },
+        { name: 'Vanilla Bean Dark Lord',        ratings: [4.0, 8.5, 9.0, 5.0, 8.0, 5.0, 3.0, 3.0] },
+        { name: 'Cantillon Sain Lamvinus',       ratings: [3.0, 7.0, 3.0, 9.0, 3.0, 4.0, 5.0, 3.5] },
+        { name: 'Weihenstephaner Hefeweissbier', ratings: [4.5, 8.0, 9.0, 5.0, 3.0, 4.0, 8.0, 5.0] }
+      ];
 
-      var inner = $('div#flavors-carousel div.carousel-inner');
-      var indicators = $('div#flavors-carousel ol.carousel-indicators');
-      $.each(flavors, function(index, flavor) {
-        inner.append('<div class="item"><h1>' + flavor + '</h1></div>');
-        indicators.append('<li data-target="#flavors-carousel" data-slide-to="' + index + '"></li>');
+      var carouselEl = $('div#attract-carousel');
+      var inner = $('div#attract-carousel div.carousel-inner');
+      var indicators = $('div#attract-carousel ol.carousel-indicators');
+      $.each(beers, function(index, beer) {
+        inner.append('<div class="item"><h1>' + beer.name + '</h1></div>');
+        indicators.append('<li data-target="#attract-carousel" data-slide-to="' + index + '"></li>');
       });
       inner.find('> div').first().addClass('active');
       indicators.find('> li').first().addClass('active');
+      carouselEl.carousel({ interval: 4000 });
 
-      carouselEl.carousel(carouselIndex).carousel('pause');
-
-      carouselEl.on('slid', function(e) {
-        carouselIndex = $('#flavors-carousel .active').index('#flavors-carousel .item')
+      carouselEl.on('slide', function(e) {
+        var index = $('#attract-carousel .active').index('#attract-carousel .item')
+        wheel.transitionData(beers[index].ratings);
       });
 
       window.wheel = new Wheel({
@@ -87,9 +93,6 @@
         lineAxes: true,
         circleAxes: false,
         innerRadiusIncrement: 9.2, /* why? */
-        onDataChange: function(data, i) {
-          carouselEl.carousel(i).carousel('pause');
-        }
       });
 
       $('#new-data').click(function(e) {

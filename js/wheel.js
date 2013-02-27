@@ -245,7 +245,7 @@ function Wheel(options) {
     vizBody.selectAll(".series g.slice path")
       .data(pie(data));
 
-    var t = vizBody.transition().duration(1000);
+    var t = vizBody.transition().duration(750);
 
     t.selectAll('.series g.handle circle')
       .attr("cx", handleX)
