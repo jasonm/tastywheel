@@ -179,18 +179,6 @@ function Wheel(options) {
       onDataChange(data, i);
     });
 
-  var focus = 0;
-  this.setFocus = function(newFocus) {
-    console.log("new focus: " + newFocus);
-    focus = newFocus;
-
-    vizBody.selectAll(".series g.slice path")
-      .data(pie(data))
-      .attr("d", bar)
-      .style("fill-opacity", function(d, i) {
-        return (focus == null || focus == i) ? 0.8 : 0.6
-      });
-  }
   var drawBars = function() {
 
     var groups = vizBody.selectAll('.series')
