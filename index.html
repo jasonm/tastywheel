@@ -95,6 +95,8 @@
         innerRadiusIncrement: 9.2, /* why? */
       });
 
+      wheel.transitionData(beers[0].ratings);
+
       $('#new-data').click(function(e) {
         e.preventDefault();
         var newValues = [];
