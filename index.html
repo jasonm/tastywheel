@@ -33,6 +33,7 @@
 
     <div class="row">
       <a id="start-attracting" class="span2 offset5 btn">Toggle Attract</a>
+      <a id="new-data" class="span2 offset5 btn">Randomize Data</a>
     </div>
   </div>
 
@@ -152,6 +153,15 @@
           carouselEl.carousel(i).carousel('pause');
           sliderEl.slider({ value: data[i] });
         }
+      });
+
+      $('#new-data').click(function(e) {
+        e.preventDefault();
+        var newValues = [];
+        for (var i = 0; i < flavors.length; i++) {
+          newValues.push(randomValue());
+        }
+        wheel.transitionData(newValues);
       });
 
       $('body').on('touchmove', function(e) { e.preventDefault(); });

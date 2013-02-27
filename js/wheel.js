@@ -248,6 +248,25 @@ function Wheel(options) {
       .attr("d", bar);
   }
 
+  var transitionData = function(newData) {
+    data = newData;
+
+    vizBody.selectAll('.series g.handle circle')
+      .data(pie(data));
+
+    vizBody.selectAll(".series g.slice path")
+      .data(pie(data));
+
+    var t = vizBody.transition().duration(1000);
+
+    t.selectAll('.series g.handle circle')
+      .attr("cx", handleX)
+      .attr("cy", handleY);
+
+    t.selectAll(".series g.slice path")
+      .attr("d", bar);
+  };
+
   buildBase();
   setScales();
   if (options.lineAxes) {
@@ -259,6 +278,7 @@ function Wheel(options) {
   drawBars();
 
   this.updateData = updateData;
+  this.transitionData = transitionData;
 
   return this;
 }
