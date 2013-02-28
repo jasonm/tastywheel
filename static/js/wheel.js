@@ -1,7 +1,7 @@
 function Wheel(options) {
   var self = this;
 
-  var opacityLow = 0.4;
+  var opacityLow = 0.6;
   var opacityMedium = 0.8;
   var opacityHigh = 0.8;
 
@@ -11,7 +11,9 @@ function Wheel(options) {
   var rootEl = options.rootEl;
 
   var radius, radiusLength;
-  var w = 800, h = 800, ruleColor = '#CCC';
+  var w = options.width || 800;
+  var h = options.height || 800;
+  var ruleColor = '#CCC';
   var innerRadiusIncrement = options.innerRadiusIncrement;
   var vizPadding = {
     top: 25,

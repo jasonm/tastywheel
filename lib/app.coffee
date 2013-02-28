@@ -16,7 +16,7 @@ Router =
       'welcome':  'welcome'
       'pick':     'showHash'
       'rate/:id': 'rate'
-      'thanks':   'showHash'
+      'thanks':   'thanks'
 
     showPane: (pane) =>
       @rootEl.find('>div').hide()
@@ -29,6 +29,11 @@ Router =
       @showPane 'welcome'
       # TODO: inject views or something
       app.views.welcome.fadeOut()
+
+    thanks: =>
+      @showPane 'thanks'
+      # TODO: inject views or something
+      app.views.thanks.fadeOut()
 
     rate: (beerId) =>
       # TODO: inject views or something

@@ -35,19 +35,65 @@ svg g.line-ticks text {
     src: url('../font/museo_slab_500-webfont.eot');
     src: url('../font/museo_slab_500-webfont.eot?#iefix') format('embedded-opentype'),
          url('../font/museo_slab_500-webfont.woff') format('woff'),
-         url('../font/museo_slab_500-webfont.ttf') format('truetype'),
-         url('../font/museo_slab_500-webfont.svg#MuseoSans-500') format('svg');
+         url('../font/museo_slab_500-webfont.ttf') format('truetype');
+         // url('../font/museo_slab_500-webfont.svg#MuseoSans-500') format('svg');
     font-weight: normal;
     font-style: normal;
   }
 
-h1 {
+h1, h2, a.btn {
   font-family: 'Museo-Slab';
-  font-size: 48px;
+  font-weight: 400;
+  text-align: center;
 }
 
-h1.welcome {
-  text-align: center;
+#region-welcome h1,
+#region-thanks h1 {
   font-size: 96px;
   line-height: 144px;
+}
+
+#region-rate {
+
+  h2 {
+    margin-top: 60px;
+  }
+
+  .wheel {
+    width: 800px;
+    height: 800px;
+    margin: 0 auto;
+  }
+
+  .ui-slider-handle {
+    height: 20px;
+  }
+
+  .slider {
+    width: 820px;
+    margin: 0 auto;
+  }
+
+  .slider-labels {
+    width: 820px;
+    margin: 0 auto;
+    position: relative;
+
+    span.label {
+      width: 60px;
+      position: absolute;
+      text-align: center;
+      top: 8px;
+    }
+    span.label-left {
+      left: -30px;
+    }
+    span.label-middle {
+      left: 380px;
+    }
+    span.label-right {
+      right: -30px;
+    }
+
+  }
 }
