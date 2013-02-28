@@ -11,12 +11,12 @@ Router =
       @rootEl = rootEl
 
     routes:
-      '':        'attract'
-      'attract': 'showHash'
-      'welcome': 'showHash'
-      'pick':    'showHash'
-      'rate':    'showHash'
-      'thanks':  'showHash'
+      '':         'attract'
+      'attract':  'showHash'
+      'welcome':  'welcome'
+      'pick':     'showHash'
+      'rate/:id': 'rate'
+      'thanks':   'showHash'
 
     showPane: (pane) =>
       @rootEl.find('>div').hide()
@@ -24,6 +24,18 @@ Router =
 
     attract: =>
       @showPane 'attract'
+
+    welcome: =>
+      @showPane 'welcome'
+      # TODO: inject views or something
+      app.views.welcome.fadeOut()
+
+    rate: (beerId) =>
+      # TODO: inject views or something
+      # TODO: handle the async collection load
+      app.views.rate.model = app.collections.beers.get(beerId)
+      app.views.rate.render()
+      @showPane 'rate'
 
     showHash: =>
       @showPane document.location.hash.replace('#', '')
@@ -38,29 +50,31 @@ class App
     @rootEl = rootEl
 
   run: =>
-    @setup 'attract', AttractView, 'beers', BeersCollection
-    @setup 'welcome', WelcomeView, null,    null
-    @setup 'pick',    PickView,    'beers', BeersCollection
-    @setup 'rate',    RateView,    null,    null
-    @setup 'thanks',  ThanksView,  null,    null
+    app.collections =
+      beers: new BeersCollection()
 
-    @router = new Router(@rootEl)
-    Backbone.history.start()
+    app.collections.beers.on 'reset', =>
+      @setup 'attract', AttractView
+      @setup 'welcome', WelcomeView
+      @setup 'pick',    PickView
+      @setup 'rate',    RateView
+      @setup 'thanks',  ThanksView
 
-  setup: (regionName, viewType, collectionName, collectionType, fetchOptions = {}) =>
-    view = null
+      app.views.attract.collection = app.collections.beers
+      app.views.attract.render()
 
-    if collectionType
-      unless @collections[collectionName]
-        collection = new collectionType()
-        collection.fetch(fetchOptions)
-        @collections[collectionName] = collection
+      app.views.pick.collection = app.collections.beers
+      app.views.pick.render()
 
-      view = new viewType({ collection: collection })
-    else
-      view = new viewType()
+      @router = new Router(@rootEl)
+      Backbone.history.start()
 
+    app.collections.beers.fetch()
+
+  setup: (regionName, viewType) =>
+    view = new viewType()
     view.render()
+
     app.views ?= {}
     app.views[regionName] = view
 

@@ -1,6 +1,10 @@
 function Wheel(options) {
   var self = this;
 
+  var opacityLow = 0.4;
+  var opacityMedium = 0.8;
+  var opacityHigh = 0.8;
+
   var keys = options.keys;
   var data = options.values;
   var onDataChange = options.onDataChange || function(){};
@@ -81,7 +85,7 @@ function Wheel(options) {
       .attr("r", function (d, i) { return radius(d); })
       .attr("class", "circle")
       .style("stroke", ruleColor)
-      .style("opacity", 0.7)
+      .style("opacity", opacityHigh)
       .style("fill", "none");
 
     circleAxes.append("svg:text")
@@ -107,7 +111,7 @@ function Wheel(options) {
     lineAxes.append('svg:line')
       .attr("x2", -1 * radius(maxVal))
       .style("stroke", ruleColor)
-      .style("opacity", 0.75)
+      .style("opacity", opacityHigh)
       .style("fill", "none");
 
     lineAxes.append('svg:text')
@@ -188,7 +192,11 @@ function Wheel(options) {
       .data(pie(data))
       .attr("d", bar)
       .style("fill-opacity", function(d, i) {
-        return (focus == null || focus == i) ? 0.8 : 0.6
+        if (focus == null) {
+          return opacityMedium;
+        } else {
+          return (focus == i) ? opacityHigh : opacityLow;
+        }
       });
   }
   var drawBars = function() {
@@ -213,7 +221,7 @@ function Wheel(options) {
       .append("path")
         .attr("fill", function(d,i) { return color(i); })
         .attr("d", bar)
-        .style("fill-opacity", 0.8);
+        .style("fill-opacity", opacityMedium);
 
     var width = 10;
     var height = 10;

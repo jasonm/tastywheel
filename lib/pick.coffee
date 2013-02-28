@@ -3,4 +3,3 @@ class PickView extends Backbone.Marionette.ItemView
   template: 'pick/index.html'
 
 _.extend(exports, {PickView})
-

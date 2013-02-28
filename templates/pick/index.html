@@ -1,2 +1,7 @@
-<h1>Pick</h1>
-<a href="#rate">Rate</a>
+<h1>What beer did you have?</h1>
+
+<ul class="nav nav-tabs nav-stacked">
+  {{#each items }}
+    <li><a href="#rate/{{ _id }}">{{ name }}</a></li>
+  {{/each}}
+</ul>

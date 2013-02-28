@@ -8,13 +8,14 @@
   <meta name="viewport" content="user-scalable=no">
 </head>
 <body>
-
-  <div id="app" class="container">
-    <div id="region-attract"></div>
-    <div id="region-welcome"></div>
-    <div id="region-pick"></div>
-    <div id="region-rate"></div>
-    <div id="region-thanks"></div>
+  <div id="wrap">
+    <div id="app" class="container">
+      <div id="region-attract"></div>
+      <div id="region-welcome"></div>
+      <div id="region-pick"></div>
+      <div id="region-rate"></div>
+      <div id="region-thanks"></div>
+    </div>
   </div>
 
   <script type="text/javascript" src="modules.js"></script>
@@ -36,6 +37,11 @@
   <script type="text/javascript" src="static/js/wheel.js"></script>
 
   <script type="text/javascript">
+    // Livereload if on localhost
+    if (document.location.hostname === "localhost") {
+      document.write('\x3Cscript type="text/javascript" src="http://localhost:9090">\x3C/script>');
+    }
+
     // Get the show on the road!
     $(function() {
       $('body').on('touchmove', function(e) { e.preventDefault(); });
