@@ -25,3 +25,29 @@ ol.carousel-indicators > li.active {
   height: 800px;
   margin: 0 auto;
 }
+
+svg g.line-ticks text {
+  font-size: 16px;
+}
+
+@font-face {
+    font-family: 'Museo-Slab';
+    src: url('../font/museo_slab_500-webfont.eot');
+    src: url('../font/museo_slab_500-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/museo_slab_500-webfont.woff') format('woff'),
+         url('../font/museo_slab_500-webfont.ttf') format('truetype'),
+         url('../font/museo_slab_500-webfont.svg#MuseoSans-500') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+h1 {
+  font-family: 'Museo-Slab';
+  font-size: 48px;
+}
+
+h1.welcome {
+  text-align: center;
+  font-size: 96px;
+  line-height: 144px;
+}
