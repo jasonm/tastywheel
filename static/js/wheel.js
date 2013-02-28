@@ -4,6 +4,7 @@ function Wheel(options) {
   var keys = options.keys;
   var data = options.values;
   var onDataChange = options.onDataChange || function(){};
+  var rootEl = options.rootEl;
 
   var radius, radiusLength;
   var w = 800, h = 800, ruleColor = '#CCC';
@@ -24,7 +25,7 @@ function Wheel(options) {
   }
 
   var buildBase = function(){
-    viz = d3.select("#radial")
+    viz = d3.select($(rootEl)[0])
       .append('svg:svg')
       .attr('width', w)
       .attr('height', h);

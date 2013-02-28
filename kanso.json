@@ -1,0 +1,24 @@
+{
+  "name": "tastywheel",
+  "version": "0.0.1",
+  "description": "wheel of beer fortune",
+  "attachments": ["index.html", "static"],
+  "coffee-script": {
+    "modules": ["lib"]
+  },
+  "modules": ["lib"],
+  "load": "lib/ddoc",
+  "handlebars": {
+    "all_partials": false,
+    "templates": "templates"
+  },
+  "dependencies": {
+    "jquery": null,
+    "handlebars": null,
+    "coffee-script-precompiler": null,
+    "attachments": null,
+    "modules": null,
+    "properties": null,
+    "db": null
+  }
+}
