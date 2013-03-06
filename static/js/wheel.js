@@ -227,7 +227,7 @@ function Wheel(options) {
 
     var width = 10;
     var height = 10;
-    var handleRad = 10;
+    var handleRad = 20;
 
     var handles = groups.selectAll(".series g.handle")
       .data(pie(data))
