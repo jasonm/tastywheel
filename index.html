@@ -21,13 +21,14 @@
   <script type="text/javascript" src="modules.js"></script>
   <script type="text/javascript">
     // Export deps onto window so other non-requirejs static scripts can access them
-    window._ = require('underscore')._;
     window.jQuery = window.$ = require('jquery');
+    window._ = require('underscore');
     window.Backbone = require('lib/vendor/backbone');
     require('lib/vendor/backbone.marionette');
     require('lib/vendor/backbone.marionette.handlebars');
     require('lib/vendor/jquery.couch');
     require('lib/vendor/backbone-couchdb');
+    require('lib/vendor/backbone-relational');
   </script>
 
   <script type="text/javascript" src="static/jquery-ui-1.10.1.custom/js/jquery-ui-1.10.1.custom.js"></script>

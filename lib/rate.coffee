@@ -1,3 +1,13 @@
+class Rating extends Backbone.RelationalModel
+
+Rating.setup()
+
+class RatingsCollection extends Backbone.Collection
+  db:
+    changes: true
+  model: Rating
+  url: '/rating'
+
 class RateView extends Backbone.Marionette.ItemView
   tagName: 'div'
   template: 'rate/index.html'
@@ -37,4 +47,4 @@ class RateView extends Backbone.Marionette.ItemView
       range: "min"
       step: 0.01
 
-_.extend(exports, {RateView})
+_.extend(exports, {RateView, Rating, RatingsCollection})
