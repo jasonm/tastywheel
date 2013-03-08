@@ -1,6 +1,5 @@
 {Beer, BeersCollection} = require('lib/beers')
 {AttractView} = require('lib/attract')
-{WelcomeView} = require('lib/welcome')
 {PickView} = require('lib/pick')
 {RateView} = require('lib/rate')
 {ThanksView} = require('lib/thanks')
@@ -13,7 +12,6 @@ Router =
     routes:
       '':         'attract'
       'attract':  'showHash'
-      'welcome':  'welcome'
       'pick':     'showHash'
       'rate/:id': 'rate'
       'thanks':   'thanks'
@@ -24,11 +22,6 @@ Router =
 
     attract: =>
       @showPane 'attract'
-
-    welcome: =>
-      @showPane 'welcome'
-      # TODO: inject views or something
-      app.views.welcome.fadeOut()
 
     thanks: =>
       @showPane 'thanks'
@@ -60,7 +53,6 @@ class App
 
     app.collections.beers.on 'reset', =>
       @setup 'attract', AttractView
-      @setup 'welcome', WelcomeView
       @setup 'pick',    PickView
       @setup 'rate',    RateView
       @setup 'thanks',  ThanksView
