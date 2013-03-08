@@ -21,17 +21,17 @@ class RateView extends Backbone.Marionette.ItemView
     minVal = 3;
     maxVal = 10;
 
-    flavors = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
+    @flavors = ['Hoppy', 'Sweet', 'Creamy', 'Fruity', 'Roasty', 'Bitter', 'Citrus', 'Floral'];
     @values = [];
 
-    _.times flavors.length, =>
+    _.times @flavors.length, =>
       @values.push(minVal)
 
     wheelEl    = @$('.wheel')
 
     wheel = new Wheel({
       rootEl: wheelEl,
-      keys: flavors,
+      keys: @flavors,
       values: @values,
       minVal: minVal,
       maxVal: maxVal,
@@ -50,10 +50,20 @@ class RateView extends Backbone.Marionette.ItemView
       range: "min"
       step: 0.01
 
-  saveRating: ->
+  saveRating: (e) ->
+    e.preventDefault()
+
     liked = @$('.slider').slider('option', 'value')
-    values = @values
-    alert("saving #{liked} and #{values}")
+
+    rating = new Rating({
+      liked: liked
+      values: _.object(@flavors, @values)
+      created_at: new Date()
+    })
+
+    @model.get('ratings').push(rating)
+    @model.save()
+
     document.location.hash = '#thanks'
 
 
