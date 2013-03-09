@@ -39,7 +39,7 @@
 
   <script type="text/javascript">
     // Livereload if on localhost
-    if (document.location.hostname === "localhost") {
+    if (document.location.hostname.match(/^localhost/)) {
       document.write('\x3Cscript type="text/javascript" src="http://localhost:9090">\x3C/script>');
     }
 
