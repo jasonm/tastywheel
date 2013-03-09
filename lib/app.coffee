@@ -105,6 +105,7 @@ class App
 
               if tapping
                 drinks.push
+                  tag_id: newScan.get('tag_id')
                   reader_id: scan.get('reader_id')
                   tap_name: tap.get('name')
                   drank_at: scan.get('created_at')
