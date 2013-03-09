@@ -1,7 +1,17 @@
-<h1>What beer did you have?</h1>
+{{#if drinks}}
+  <h2>Rate a beer you've drank:</h2>
+  <ul class="nav nav-tabs nav-stacked">
+    {{#each drinks}}
+      <li><a href="#rate/{{ beer._id }}">{{ beer.name }} poured {{ drank_at }} from {{ tap_name }}</a></li>
+    {{/each}}
+  </ul>
+  <h2>Rate some other beer:</h2>
+{{else}}
+  <h2>Which beer will you rate?</h2>
+{{/if}}
 
 <ul class="nav nav-tabs nav-stacked">
-  {{#each items }}
+  {{#each beers}}
     <li><a href="#rate/{{ _id }}">{{ name }}</a></li>
   {{/each}}
 </ul>
